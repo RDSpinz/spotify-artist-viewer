@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AED97601B275FCE0059A1AC /* SAArtistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AED975E1B275FCE0059A1AC /* SAArtistViewController.m */; };
+		1AED97651B27617A0059A1AC /* SASearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AED97631B27617A0059A1AC /* SASearchViewController.m */; };
+		1AED976A1B2881E40059A1AC /* ArtistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AED97681B2881E40059A1AC /* ArtistTableViewCell.m */; };
+		1AED976B1B2881E40059A1AC /* ArtistTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AED97691B2881E40059A1AC /* ArtistTableViewCell.xib */; };
 		2E76742D1B26766200336867 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E76742C1B26766200336867 /* main.m */; };
 		2E7674301B26766200336867 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E76742F1B26766200336867 /* AppDelegate.m */; };
 		2E7674331B26766200336867 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7674321B26766200336867 /* ViewController.m */; };
@@ -29,6 +33,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AED975D1B275FCE0059A1AC /* SAArtistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAArtistViewController.h; sourceTree = "<group>"; };
+		1AED975E1B275FCE0059A1AC /* SAArtistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAArtistViewController.m; sourceTree = "<group>"; };
+		1AED97621B27617A0059A1AC /* SASearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SASearchViewController.h; sourceTree = "<group>"; };
+		1AED97631B27617A0059A1AC /* SASearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SASearchViewController.m; sourceTree = "<group>"; };
+		1AED97671B2881E40059A1AC /* ArtistTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArtistTableViewCell.h; sourceTree = "<group>"; };
+		1AED97681B2881E40059A1AC /* ArtistTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArtistTableViewCell.m; sourceTree = "<group>"; };
+		1AED97691B2881E40059A1AC /* ArtistTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArtistTableViewCell.xib; sourceTree = "<group>"; };
 		2E7674271B26766200336867 /* spotify-artist-viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spotify-artist-viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E76742B1B26766200336867 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E76742C1B26766200336867 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -93,6 +104,13 @@
 				2E76742F1B26766200336867 /* AppDelegate.m */,
 				2E7674311B26766200336867 /* ViewController.h */,
 				2E7674321B26766200336867 /* ViewController.m */,
+				1AED975D1B275FCE0059A1AC /* SAArtistViewController.h */,
+				1AED975E1B275FCE0059A1AC /* SAArtistViewController.m */,
+				1AED97621B27617A0059A1AC /* SASearchViewController.h */,
+				1AED97631B27617A0059A1AC /* SASearchViewController.m */,
+				1AED97671B2881E40059A1AC /* ArtistTableViewCell.h */,
+				1AED97681B2881E40059A1AC /* ArtistTableViewCell.m */,
+				1AED97691B2881E40059A1AC /* ArtistTableViewCell.xib */,
 				2E7674341B26766200336867 /* Main.storyboard */,
 				2E7674371B26766200336867 /* Images.xcassets */,
 				2E7674391B26766200336867 /* LaunchScreen.xib */,
@@ -227,6 +245,7 @@
 			files = (
 				2E7674361B26766200336867 /* Main.storyboard in Resources */,
 				2E76743B1B26766200336867 /* LaunchScreen.xib in Resources */,
+				1AED976B1B2881E40059A1AC /* ArtistTableViewCell.xib in Resources */,
 				2E7674381B26766200336867 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,6 +265,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E7674541B2676F400336867 /* SAArtist.m in Sources */,
+				1AED97651B27617A0059A1AC /* SASearchViewController.m in Sources */,
+				1AED976A1B2881E40059A1AC /* ArtistTableViewCell.m in Sources */,
+				1AED97601B275FCE0059A1AC /* SAArtistViewController.m in Sources */,
 				2E7674331B26766200336867 /* ViewController.m in Sources */,
 				2E7674301B26766200336867 /* AppDelegate.m in Sources */,
 				2E76742D1B26766200336867 /* main.m in Sources */,
@@ -446,6 +468,7 @@
 				2E76744C1B26766200336867 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2E76744D1B26766200336867 /* Build configuration list for PBXNativeTarget "spotify-artist-viewerTests" */ = {
 			isa = XCConfigurationList;
@@ -454,6 +477,7 @@
 				2E76744F1B26766200336867 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
