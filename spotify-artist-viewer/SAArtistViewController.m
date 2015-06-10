@@ -8,6 +8,7 @@
 
 #import "SAArtistViewController.h"
 #import "SAArtist.h"
+#import "SASearchViewController.h"
 @interface SAArtistViewController ()
 @property SAArtist* artist;
 @end
@@ -23,8 +24,15 @@
     self = [super init];
     if(self){
         self.artist = artist;
+        
     }
     return self;
 }
 
+- (IBAction)backButtonPressed:(id)sender {
+    SASearchViewController *detailViewController = [[SASearchViewController alloc] init];
+    
+    detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"searchView"];
+    [self presentViewController:detailViewController animated:YES completion:nil];
+}
 @end

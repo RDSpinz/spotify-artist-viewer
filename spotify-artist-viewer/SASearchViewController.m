@@ -70,16 +70,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    
-    
     SAArtist *artist = [self.searchResults objectAtIndex:indexPath.row];
     SAArtistViewController *detailViewController = [[SAArtistViewController alloc] initWithArtist:artist];
-    // Pass the selected object to the new view controller.
     
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"artistView"];
+    [self presentViewController:detailViewController animated:YES completion:nil];
 }
 
 
