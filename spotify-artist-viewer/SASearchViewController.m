@@ -60,12 +60,6 @@
     
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    
-}
-
-
-
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -79,7 +73,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
+    return 75;
 }
 
 #pragma mark - UITableViewDataSource
@@ -87,7 +81,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSSet* set = [[NSSet alloc] initWithArray:self.searchResults];
-        return [set count];
+    self.searchResults = [set allObjects];
+    NSLog(@"COUNT: %lu",(unsigned long)self.searchResults.count);
+        return [self.searchResults count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

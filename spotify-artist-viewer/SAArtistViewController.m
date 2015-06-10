@@ -31,7 +31,7 @@
 
 - (IBAction)backButtonPressed:(id)sender {
     SASearchViewController *detailViewController = [[SASearchViewController alloc] init];
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
     detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"searchView"];
     [self presentViewController:detailViewController animated:YES completion:nil];
 }
