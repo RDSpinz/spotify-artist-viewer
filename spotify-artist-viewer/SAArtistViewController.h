@@ -14,4 +14,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *artistNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *artistImageView;
 @property (strong, nonatomic) IBOutlet UITextView *artistBioTextView;
+@property (strong, nonatomic) SAArtist* artist;
 @end

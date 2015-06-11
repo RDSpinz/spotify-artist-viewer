@@ -35,19 +35,24 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
                                                                    options:0
                                                                      error:&jsonError];
         
-//        NSLog(@"QUERY: %@",query);
         NSArray *artistsResult = [jsonResult valueForKeyPath:@"artists.items"];
        
         NSArray* imageArrays = [artistsResult valueForKeyPath:@"images.url"];
+        NSArray* uriList = [artistsResult valueForKeyPath:@"uri"];
+        NSString* uri = [uriList firstObject];
         NSMutableArray* individualImages = [[NSMutableArray alloc] init];
         for (NSArray* array in imageArrays) {
-            [individualImages addObject:array[2]];
+            if ([array count]) {
+                [individualImages addObject:array[0]];
+            } else {
+                [individualImages addObject:@""];
+            }
         }
 
         NSArray *names = [artistsResult valueForKey:@"name"];
         NSMutableArray* returnArtistsArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < names.count; i++) {
-            SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil];
+            SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil andURI:uri];
             [returnArtistsArray addObject:a];
         }
         

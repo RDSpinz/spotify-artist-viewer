@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FSi-Fz-eJ5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="eOp-m0-rXm">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--Search View Controller-->
+        <!--Spotify Artist Search-->
         <scene sceneID="vep-yL-qYO">
             <objects>
-                <viewController storyboardIdentifier="searchView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FSi-Fz-eJ5" customClass="SASearchViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="searchView" title="Spotify Artist Search" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FSi-Fz-eJ5" customClass="SASearchViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Qtr-om-X8D"/>
                         <viewControllerLayoutGuide type="bottom" id="96J-kD-Cft"/>
@@ -20,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
-                                    <outlet property="delegate" destination="FSi-Fz-eJ5" id="qKW-Js-1DI"/>
+                                    <outlet property="delegate" destination="oHj-ku-vJi" id="Eas-R2-sA5"/>
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fph-O0-fHk">
@@ -34,10 +34,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="xSd-tZ-PjN"/>
+                    <navigationItem key="navigationItem" title="Spotify Artist Viewer" id="xSd-tZ-PjN"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="searchBarTop" destination="DrP-E3-D2U" id="Snj-Ie-ct5"/>
+                        <outlet property="searchBarTop" destination="DrP-E3-D2U" id="Y05-rb-pPt"/>
                         <outlet property="searchDisplayController" destination="oHj-ku-vJi" id="0S6-vX-x7V"/>
                         <outlet property="tableView" destination="fph-O0-fHk" id="9B4-pq-GXv"/>
                     </connections>
@@ -46,14 +46,13 @@
                 <searchDisplayController id="oHj-ku-vJi">
                     <connections>
                         <outlet property="delegate" destination="FSi-Fz-eJ5" id="FhM-if-y21"/>
-                        <outlet property="searchBar" destination="DrP-E3-D2U" id="cfO-Rl-Ur5"/>
                         <outlet property="searchContentsController" destination="FSi-Fz-eJ5" id="i2e-iz-SQc"/>
                         <outlet property="searchResultsDataSource" destination="FSi-Fz-eJ5" id="Og5-3b-FoT"/>
                         <outlet property="searchResultsDelegate" destination="FSi-Fz-eJ5" id="RtY-Pc-qKq"/>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="1035" y="-594"/>
+            <point key="canvasLocation" x="1847" y="-594"/>
         </scene>
         <!--Artist View Controller-->
         <scene sceneID="hGd-QD-LTy">
@@ -104,7 +103,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R6x-lx-pDw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1536" y="-569"/>
+            <point key="canvasLocation" x="2348" y="-569"/>
+        </scene>
+        <!--Spotify Artist Viewer-->
+        <scene sceneID="Xzc-Fd-fs9">
+            <objects>
+                <navigationController title="Spotify Artist Viewer" automaticallyAdjustsScrollViewInsets="NO" id="eOp-m0-rXm" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="SL1-RI-wQA">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="FSi-Fz-eJ5" kind="relationship" relationship="rootViewController" id="g8E-Th-cOu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ebs-td-P2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1035" y="-594"/>
         </scene>
     </scenes>
 </document>

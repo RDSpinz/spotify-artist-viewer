@@ -11,6 +11,7 @@
 @property NSString* name;
 @property NSString* imageURL;
 @property NSString* bio;
+@property NSString* uri;
 
--(instancetype)initWithName:(NSString*)name image:(NSString*)image andBio:(NSString*)bio;
+-(instancetype)initWithName:(NSString*)name image:(NSString*)image andBio:(NSString*)bio andURI:(NSString*)uri;
 @end

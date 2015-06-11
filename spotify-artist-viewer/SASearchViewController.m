@@ -22,6 +22,7 @@
 // for state restoration
 @property BOOL searchControllerWasActive;
 @property BOOL searchControllerSearchFieldWasFirstResponder;
+
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBarTop;
 @property (strong, nonatomic) NSArray *searchResults;
 @property UITableViewController* tableViewController;
@@ -31,10 +32,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBar.topItem.title = @"Spotify Artist Search";
+
     // Do any additional setup after loading the view from its nib.
-    
-    //[self retrieveSearchResult];
-    self.searchBarTop = [[UISearchBar alloc] init];
     self.navigationItem.titleView = self.searchBarTop;
     self.searchBarTop.delegate = self;
     
@@ -42,11 +42,14 @@
     _searchController = [[UISearchController alloc] initWithSearchResultsController:self.tableViewController];
     self.searchController.searchResultsUpdater = self;
     [self.searchController.searchBar sizeToFit];
-    self.tableViewController.tableView.tableHeaderView = self.searchController.searchBar;
+    
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
     // we want to be the delegate for our filtered table so didSelectRowAtIndexPath is called for both tables
     self.tableView.delegate = self;
+    self.tableViewController.tableView.delegate = self;
+    self.tableViewController.tableView.dataSource = self;
+    
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO; // default is YES
     self.searchController.searchBar.delegate = self; // so we can monitor text changes + others
@@ -57,17 +60,23 @@
     //
     self.definesPresentationContext = YES;  // know where you want UISearchController to be displayed
     
+    //[[self navigationController] setNavigationBarHidden:YES animated:YES];
     
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SAArtist *artist = [self.searchResults objectAtIndex:indexPath.row];
-    SAArtistViewController *detailViewController = [[SAArtistViewController alloc] initWithArtist:artist];
     
-    detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"artistView"];
+    SAArtistViewController * detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"artistView"];
+    detailViewController.artist = artist;
     [self presentViewController:detailViewController animated:YES completion:nil];
 }
 
@@ -90,8 +99,6 @@
     
     // Configure the cell...
     cell = [[ArtistTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    
-    NSLog(@"SEARCH RESULTS: %@",self.searchResults);
     SAArtist* artist = [self.searchResults objectAtIndex:indexPath.row];
     cell.textLabel.text = artist.name;
     return cell;
@@ -105,6 +112,7 @@
      
     {
         self.searchResults = blockArtists;
+        [self.tableViewController.tableView reloadData];
         [self.tableView reloadData];
 
     } failure:^(NSError *error) {
