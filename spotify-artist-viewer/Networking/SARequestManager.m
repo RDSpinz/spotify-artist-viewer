@@ -29,7 +29,7 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
     // TODO: make network calls to spotify API
     if (![query isEqualToString:@""]) {
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:SAArtistsSearchUrl,query]]];
-        
+        if (data) {
         NSError *jsonError = nil;
         NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data
                                                                    options:0
@@ -39,7 +39,7 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
        
         NSArray* imageArrays = [artistsResult valueForKeyPath:@"images.url"];
         NSArray* uriList = [artistsResult valueForKeyPath:@"uri"];
-        NSString* uri = [uriList firstObject];
+
         NSMutableArray* individualImages = [[NSMutableArray alloc] init];
         for (NSArray* array in imageArrays) {
             if ([array count]) {
@@ -52,15 +52,15 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
         NSArray *names = [artistsResult valueForKey:@"name"];
         NSMutableArray* returnArtistsArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < names.count; i++) {
-            SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil andURI:uri];
+            SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil andURI:uriList[i]];
             [returnArtistsArray addObject:a];
         }
         
         if (success) {
             success(returnArtistsArray);
         }
-
+        }
     }
-    }
+}
 
 @end

@@ -10,7 +10,8 @@
 #import "SAArtist.h"
 #import "SASearchViewController.h"
 #import <QuartzCore/QuartzCore.h>
-@interface SAArtistViewController ()
+@interface SAArtistViewController () <UIScrollViewDelegate>
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -30,6 +31,19 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     self.artistImageView.layer.cornerRadius = self.artistImageView.frame.size.height / 2;
     self.artistImageView.layer.masksToBounds = YES;
     self.artistImageView.layer.borderWidth = 0;
+    
+    [self textViewDidChange:self.artistBioTextView];
+    [self.artistBioTextView setText:self.artist.bio];
+    
+    CGFloat scrollViewHeight = 0.0f;
+    for (UIView* view in self.scrollView.subviews)
+    {
+        scrollViewHeight += view.frame.size.height;
+    }
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    
+    [self.scrollView setContentSize:(CGSizeMake(screenWidth, scrollViewHeight + 50))];
 }
 
 - (void)viewDidLoad {
@@ -39,6 +53,9 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     self.artist.bio = [self retrieveBio];
     self.artistBioTextView.text = self.artist.bio;
+    
+    self.scrollView.delegate = self;
+    
 }
 
 -(instancetype)initWithArtist:(SAArtist*)artist{
@@ -57,25 +74,37 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     [self presentViewController:detailViewController animated:YES completion:nil];
 }
 
+- (void)textViewDidChange:(UITextView *)textView
+{
+    CGFloat fixedWidth = textView.frame.size.width;
+    CGSize newSize = [textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
+    CGRect newFrame = textView.frame;
+    newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
+    textView.frame = newFrame;
+}
+
 #pragma mark - retrieve bio
 
--(NSString*)retrieveBio{
-    
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:SAArtistsSearchUrl,self.artist.uri]]];
+-(NSString*)retrieveBio
+{
+    NSLog(@"THE URI IS: %@",self.artist.uri);
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:SAArtistsSearchUrl,self.artist.uri]]];
         
-        NSError *jsonError = nil;
-        NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data
+    NSError *jsonError = nil;
+    NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data
                                                                    options:0
                                                                      error:&jsonError];
         
-        NSArray *artistsResult = [jsonResult valueForKeyPath:@"response.biographies"];
+    NSArray *artistsResult = [jsonResult valueForKeyPath:@"response.biographies"];
     for (NSDictionary* obj in artistsResult) {
         if ([[obj valueForKey:@"site"] isEqualToString:@"last.fm"]) {
-            NSLog(@"OBJECT: %@",obj);
             self.artist.bio = [obj valueForKey:@"text"];
         }
     }
-
-return self.artist.bio;
+    return self.artist.bio;
 }
+
+#pragma mark - UScrollViewDelegate
+
+
 @end
