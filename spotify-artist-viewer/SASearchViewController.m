@@ -14,7 +14,7 @@
 
 
 @interface SASearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating> {
-    NSMutableDictionary* artists;
+//    NSMutableDictionary* artists;
 }
 @property (nonatomic, strong) UISearchController *searchController;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -80,28 +80,20 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSSet* set = [[NSSet alloc] initWithArray:self.searchResults];
-    self.searchResults = [set allObjects];
-    NSLog(@"COUNT: %lu",(unsigned long)self.searchResults.count);
-        return [self.searchResults count];
+    return [self.searchResults count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     ArtistTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        
-        NSDictionary* artist = [[NSDictionary alloc] init];
-        // Configure the cell...
-        cell = [[ArtistTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        
-        artist = [self.searchResults objectAtIndex:indexPath.row];
-        NSLog(@"ARTIST: %@",artist);
-        
-        //cell.textLabel.text = [artist objectForKey:@"Artist"];
-        cell.textLabel.text = self.searchResults[indexPath.row];
-    }
+    
+    // Configure the cell...
+    cell = [[ArtistTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    
+    NSLog(@"SEARCH RESULTS: %@",self.searchResults);
+    SAArtist* artist = [self.searchResults objectAtIndex:indexPath.row];
+    cell.textLabel.text = artist.name;
     return cell;
 }
 

@@ -6,6 +6,7 @@
 //
 
 #import "SARequestManager.h"
+#import "SAArtist.h"
 
 @implementation SARequestManager
 
@@ -34,14 +35,24 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
                                                                    options:0
                                                                      error:&jsonError];
         
-        
+//        NSLog(@"QUERY: %@",query);
         NSArray *artistsResult = [jsonResult valueForKeyPath:@"artists.items"];
-        NSDictionary * images = [jsonResult valueForKey:@"images"];
-        NSLog(@"URL: %@",images);
+       
+        NSArray* imageArrays = [artistsResult valueForKeyPath:@"images.url"];
+        NSMutableArray* individualImages = [[NSMutableArray alloc] init];
+        for (NSArray* array in imageArrays) {
+            [individualImages addObject:array[2]];
+        }
+
         NSArray *names = [artistsResult valueForKey:@"name"];
+        NSMutableArray* returnArtistsArray = [[NSMutableArray alloc] init];
+        for (int i = 0; i < names.count; i++) {
+            SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil];
+            [returnArtistsArray addObject:a];
+        }
         
         if (success) {
-            success(names);
+            success(returnArtistsArray);
         }
 
     }

@@ -19,7 +19,8 @@
 }
 
 -(NSString*)description{
-    return self.name;
+    NSString* descriptionString = [NSString stringWithFormat:@"Artist: %@, Image: %@",self.name,self.imageURL];
+    return descriptionString;
 }
 
 -(NSComparisonResult)compare:(SAArtist*)otherObject{
