@@ -14,16 +14,10 @@
 
 
 @interface SASearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating> {
-//    NSMutableDictionary* artists;
 }
 @property (nonatomic, strong) UISearchController *searchController;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
-// for state restoration
-@property BOOL searchControllerWasActive;
-@property BOOL searchControllerSearchFieldWasFirstResponder;
-
-@property (strong, nonatomic) IBOutlet UISearchBar *searchBarTop;
 @property (strong, nonatomic) NSArray *searchResults;
 @property UITableViewController* tableViewController;
 @end
@@ -33,10 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.topItem.title = @"Spotify Artist Search";
-
-    // Do any additional setup after loading the view from its nib.
-    self.navigationItem.titleView = self.searchBarTop;
-    self.searchBarTop.delegate = self;
     
     self.tableViewController = [[UITableViewController alloc] init];
     _searchController = [[UISearchController alloc] initWithSearchResultsController:self.tableViewController];
@@ -54,25 +44,15 @@
     self.searchController.dimsBackgroundDuringPresentation = NO; // default is YES
     self.searchController.searchBar.delegate = self; // so we can monitor text changes + others
     
-    // Search is now just presenting a view controller. As such, normal view controller
-    // presentation semantics apply. Namely that presentation will walk up the view controller
-    // hierarchy until it finds the root view controller or one that defines a presentation context.
-    //
     self.definesPresentationContext = YES;  // know where you want UISearchController to be displayed
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
     
-    //[[self navigationController] setNavigationBarHidden:YES animated:YES];
-    
+    self.tableView.frame = screenRect;
 }
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SAArtist *artist = [self.searchResults objectAtIndex:indexPath.row];
     
     SAArtistViewController * detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"artistView"];
@@ -87,13 +67,11 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.searchResults count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     ArtistTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -106,17 +84,14 @@
 
 #pragma mark - UISearchBarDelegate
 
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
-{
-    [[SARequestManager sharedManager] getArtistsWithQuery:searchController.searchBar.text success:^(NSArray *blockArtists)
-     
-    {
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    [[SARequestManager sharedManager] getArtistsWithQuery:searchController.searchBar.text success:^(NSArray *blockArtists) {
         self.searchResults = blockArtists;
         [self.tableViewController.tableView reloadData];
         [self.tableView reloadData];
 
-    } failure:^(NSError *error) {
-
+} failure:^(NSError *error) {
+    
     }];
 }
 

@@ -19,33 +19,6 @@
 
 static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api/v4/artist/biographies?api_key=KUAKSGNM0ERIJ3ZO8&id=spotify:artist:%@";
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    self.artistNameLabel.text = self.artist.name;
-    
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.artist.imageURL]];
-    
-    self.artistImageView.image = [UIImage imageWithData:imageData];
-    
-    self.artistImageView.layer.cornerRadius = self.artistImageView.frame.size.height / 2;
-    self.artistImageView.layer.masksToBounds = YES;
-    self.artistImageView.layer.borderWidth = 0;
-    
-    [self textViewDidChange:self.artistBioTextView];
-    [self.artistBioTextView setText:self.artist.bio];
-    
-    CGFloat scrollViewHeight = 0.0f;
-    for (UIView* view in self.scrollView.subviews)
-    {
-        scrollViewHeight += CGRectGetHeight(view.frame);
-    }
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    
-    [self.scrollView setContentSize:(CGSizeMake(screenWidth, scrollViewHeight + 50))];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -55,15 +28,33 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     
     self.scrollView.delegate = self;
     
+    [self.artistBioTextView setText:self.artist.bio];
+    [self textViewDidChange:self.artistBioTextView];
+    
+    CGFloat scrollViewHeight = 0.0f;
+    for (UIView* view in self.scrollView.subviews)
+    {
+        scrollViewHeight += CGRectGetHeight(view.frame);
+    }
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = CGRectGetWidth(screenRect);
+    
+    [self.scrollView setContentSize:(CGSizeMake(screenWidth, scrollViewHeight + 75))];
+    
+
 }
 
--(instancetype)initWithArtist:(SAArtist*)artist{
-    self = [super init];
-    if(self){
-        self.artist = artist;
-        
-    }
-    return self;
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.artistNameLabel.text = self.artist.name;
+    
+    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.artist.imageURL]];
+    
+    self.artistImageView.image = [UIImage imageWithData:imageData];
+    self.artistImageView.layer.cornerRadius = self.artistImageView.frame.size.height / 2;
+    self.artistImageView.layer.masksToBounds = YES;
+    self.artistImageView.layer.borderWidth = 0;
 }
 
 - (IBAction)backButtonPressed:(id)sender {
@@ -73,8 +64,7 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     [self presentViewController:detailViewController animated:YES completion:nil];
 }
 
-- (void)textViewDidChange:(UITextView *)textView
-{
+- (void)textViewDidChange:(UITextView *)textView {
     CGFloat fixedWidth = textView.frame.size.width;
     CGSize newSize = [textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
     CGRect newFrame = textView.frame;
@@ -84,9 +74,7 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
 
 #pragma mark - retrieve bio
 
--(NSString*)retrieveBio
-{
-    NSLog(@"THE URI IS: %@",self.artist.uri);
+-(NSString*)retrieveBio {
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:SAArtistsSearchUrl,self.artist.uri]]];
         
     NSError *jsonError = nil;
@@ -102,8 +90,6 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     }
     return self.artist.bio;
 }
-
-#pragma mark - UScrollViewDelegate
 
 
 @end

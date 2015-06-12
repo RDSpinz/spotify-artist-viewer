@@ -11,15 +11,4 @@
 
 @implementation ArtistTableViewCell
 
--(void)configureCell:(UITableViewCell*)cell ForForm:(SAArtist *)cellArtist {
-    ArtistTableViewCell* newCell = [[ArtistTableViewCell alloc] init];
-    newCell.textLabel.text = cellArtist.name;
-    cell = newCell;
-    
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
-}
-
 @end
