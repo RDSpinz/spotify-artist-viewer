@@ -11,25 +11,14 @@
 
 @implementation ArtistTableViewCell
 
-- (void)awakeFromNib {
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
--(void)configureCell:(UITableViewCell*)cell ForForm:(SAArtist *)cellArtist{
+-(void)configureCell:(UITableViewCell*)cell ForForm:(SAArtist *)cellArtist {
     ArtistTableViewCell* newCell = [[ArtistTableViewCell alloc] init];
     newCell.textLabel.text = cellArtist.name;
     cell = newCell;
     
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 80;
 }
 

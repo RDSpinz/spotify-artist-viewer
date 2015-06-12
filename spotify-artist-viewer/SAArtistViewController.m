@@ -38,7 +38,7 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     CGFloat scrollViewHeight = 0.0f;
     for (UIView* view in self.scrollView.subviews)
     {
-        scrollViewHeight += view.frame.size.height;
+        scrollViewHeight += CGRectGetHeight(view.frame);
     }
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
@@ -49,8 +49,7 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(goBack)];
-    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    
     self.artist.bio = [self retrieveBio];
     self.artistBioTextView.text = self.artist.bio;
     

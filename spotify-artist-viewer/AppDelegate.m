@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SARequestManager.h"
 
 @interface AppDelegate ()
 
