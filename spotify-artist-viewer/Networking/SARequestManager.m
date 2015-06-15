@@ -30,31 +30,23 @@
         NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data
                                                                    options:0
                                                                      error:&jsonError];
-        
-        NSArray *artistsResult = [jsonResult valueForKeyPath:@"artists.items"];
-       
-        NSArray* imageArrays = [artistsResult valueForKeyPath:@"images.url"];
-        NSArray* uriList = [artistsResult valueForKeyPath:@"uri"];
-
-        NSMutableArray* individualImages = [[NSMutableArray alloc] init];
-        for (NSArray* array in imageArrays) {
-            if ([array count]) {
-                [individualImages addObject:array[0]];
-            } else {
-                [individualImages addObject:@""];
+            NSArray* returnArray;
+            switch (artistTrackEnum) {
+                case SASearchModeArtist:
+                    returnArray = [self artistsFromJSON:jsonResult];
+                    break;
+                case SASearchModeTrack:
+                    returnArray = [self tracksFromJSON:jsonResult];
+                    break;
+                case SASearchModeBoth:
+                    //
+                    break;
+                default:
+                    break;
             }
-        }
-
-        NSArray *names = [artistsResult valueForKey:@"name"];
-        NSMutableArray* returnArtistsArray = [[NSMutableArray alloc] init];
-        for (int i = 0; i < names.count; i++) {
-            SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil andURI:uriList[i]];
-            [returnArtistsArray addObject:a];
-        }
-        
-        if (success) {
-            success(returnArtistsArray);
-        }
+            if (success) {
+                success(returnArray);
+            }
         }
     }
 }
@@ -73,6 +65,39 @@
         default:
             break;
     }
+}
+
+-(NSArray*)artistsFromJSON:(NSDictionary*)jsonResult {
+    NSArray *artistsResult = [jsonResult valueForKeyPath:@"artists.items"];
+    
+    NSArray* imageArrays = [artistsResult valueForKeyPath:@"images.url"];
+    NSArray* uriList = [artistsResult valueForKeyPath:@"uri"];
+    
+    NSMutableArray* individualImages = [[NSMutableArray alloc] init];
+    for (NSArray* array in imageArrays) {
+        if ([array count]) {
+            [individualImages addObject:array[0]];
+        } else {
+            [individualImages addObject:@""];
+        }
+    }
+    
+    NSArray *names = [artistsResult valueForKey:@"name"];
+    NSMutableArray* returnArtistsArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < names.count; i++) {
+        SAArtist* a = [[SAArtist alloc] initWithName:names[i] image:individualImages[i] andBio:nil andURI:uriList[i]];
+        [returnArtistsArray addObject:a];
+    }
+    
+   
+        return returnArtistsArray;
+}
+
+-(NSArray*)tracksFromJSON:(NSDictionary*)jsonResult {
+    NSArray* tracksResult = [jsonResult valueForKeyPath:@"tracks"];
+    
+    return tracksResult;
+                        
 }
 
 @end
