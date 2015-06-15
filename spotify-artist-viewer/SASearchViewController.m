@@ -11,27 +11,36 @@
 #import "SAArtistViewController.h"
 #import "ArtistTableViewCell.h"
 #import "SARequestManager.h"
-
+#import "AFNetworking.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface SASearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating> {
 }
 @property (nonatomic, strong) UISearchController *searchController;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-
 @property (strong, nonatomic) NSArray *searchResults;
 @property UITableViewController* tableViewController;
+@property (nonatomic,assign) SASearchModeOption searchModeOption;
 @end
 
 @implementation SASearchViewController
 
+static NSString *CellIdentifier = @"Artist_Cell_ID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.topItem.title = @"Spotify Artist Search";
     
     self.tableViewController = [[UITableViewController alloc] init];
+    [self.tableViewController.tableView registerClass:[ArtistTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.tableView registerClass:[ArtistTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    [self.tableViewController.tableView registerNib:[UINib nibWithNibName:@"ArtistTableViewCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"ArtistTableViewCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
     _searchController = [[UISearchController alloc] initWithSearchResultsController:self.tableViewController];
     self.searchController.searchResultsUpdater = self;
     [self.searchController.searchBar sizeToFit];
+    [self.searchController.searchBar setPlaceholder:@"Search for Artist, Track, or Both"];
+    self.searchController.searchBar.scopeButtonTitles = @[@"Artist",@"Track",@"Both"];
+    self.searchModeOption = self.searchController.searchBar.selectedScopeButtonIndex;
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
@@ -72,27 +81,36 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    ArtistTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    // Configure the cell...
-    cell = [[ArtistTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    ArtistTableViewCell *cell = (ArtistTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (indexPath.row % 2 == 0) {
+        cell.backgroundColor = [UIColor lightGrayColor];
+    }
     SAArtist* artist = [self.searchResults objectAtIndex:indexPath.row];
-    cell.textLabel.text = artist.name;
+    cell.artistNameLabel.text = artist.name;
+    [cell.artistImageView sd_setImageWithURL:[NSURL URLWithString:artist.imageURL]];
+    
     return cell;
 }
 
 #pragma mark - UISearchBarDelegate
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    [[SARequestManager sharedManager] getArtistsWithQuery:searchController.searchBar.text success:^(NSArray *blockArtists) {
-        self.searchResults = blockArtists;
-        [self.tableViewController.tableView reloadData];
-        [self.tableView reloadData];
-
-} failure:^(NSError *error) {
+            [[SARequestManager sharedManager] getObjectsWithQuery:searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockArtists) {
+                self.searchResults = blockArtists;
+                [self.tableViewController.tableView reloadData];
+                [self.tableView reloadData];
+                
+            } failure:^(NSError *error) {
+                
+            }];
     
-    }];
+
+}
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
+    self.searchModeOption = self.searchController.searchBar.selectedScopeButtonIndex;
+    NSLog(@"Scope is: %lu",(unsigned long)self.searchModeOption);
 }
 
 @end

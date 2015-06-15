@@ -5,12 +5,10 @@
 //  Copyright (c) 2015 Intrepid. All rights reserved.
 //
 
-#import "SARequestManager.h"
 #import "SAArtist.h"
+#import "SARequestManager.h"
 
 @implementation SARequestManager
-
-static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search?q=%@&type=track,artist&market=US";
 
 + (instancetype)sharedManager {
     static dispatch_once_t onceToken;
@@ -21,14 +19,12 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
     return sharedManager;
 }
 
-- (void)getArtistsWithQuery:(NSString *)query
+- (void)getObjectsWithQuery:(NSString *)query forItemEnum:(SASearchModeOption)artistTrackEnum
                     success:(void (^)(NSArray *artists))success
                     failure:(void (^)(NSError *error))failure {
     
-    
-    // TODO: make network calls to spotify API
     if (![query isEqualToString:@""]) {
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:SAArtistsSearchUrl,query]]];
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:[self searchURLForOption:artistTrackEnum],query]]];
         if (data) {
         NSError *jsonError = nil;
         NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data
@@ -60,6 +56,22 @@ static NSString * const SAArtistsSearchUrl = @"https://api.spotify.com/v1/search
             success(returnArtistsArray);
         }
         }
+    }
+}
+
+- (NSString *)searchURLForOption:(SASearchModeOption)option {
+    switch (option) {
+        case SASearchModeArtist:
+            return @"https://api.spotify.com/v1/search?q=%@&type=artist&market=US";
+            break;
+        case SASearchModeTrack:
+            return @"https://api.spotify.com/v1/search?q=%@&type=track&market=US";
+            break;
+        case SASearchModeBoth:
+            return @"https://api.spotify.com/v1/search?q=%@&type=track,artist&market=US";
+            break;
+        default:
+            break;
     }
 }
 

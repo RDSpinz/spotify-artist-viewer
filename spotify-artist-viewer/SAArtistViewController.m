@@ -10,6 +10,8 @@
 #import "SAArtist.h"
 #import "SASearchViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+
 @interface SAArtistViewController () <UIScrollViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
@@ -49,9 +51,7 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     
     self.artistNameLabel.text = self.artist.name;
     
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.artist.imageURL]];
-    
-    self.artistImageView.image = [UIImage imageWithData:imageData];
+    [self.artistImageView sd_setImageWithURL:[NSURL URLWithString:self.artist.imageURL]];
     self.artistImageView.layer.cornerRadius = self.artistImageView.frame.size.height / 2;
     self.artistImageView.layer.masksToBounds = YES;
     self.artistImageView.layer.borderWidth = 0;
@@ -85,6 +85,9 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     NSArray *artistsResult = [jsonResult valueForKeyPath:@"response.biographies"];
     for (NSDictionary* obj in artistsResult) {
         if ([[obj valueForKey:@"site"] isEqualToString:@"last.fm"]) {
+            self.artist.bio = [obj valueForKey:@"text"];
+            break;
+        } else {
             self.artist.bio = [obj valueForKey:@"text"];
         }
     }
