@@ -6,6 +6,7 @@
 //
 
 #import "SAArtist.h"
+#import "SATrack.h"
 #import "SARequestManager.h"
 
 @implementation SARequestManager
@@ -94,9 +95,17 @@
 }
 
 -(NSArray*)tracksFromJSON:(NSDictionary*)jsonResult {
-    NSArray* tracksResult = [jsonResult valueForKeyPath:@"tracks"];
+    NSArray* tracksResult = [jsonResult valueForKeyPath:@"tracks.items"];
+    NSArray* names = [tracksResult valueForKey:@"name"];
+    NSArray* uriList = [tracksResult valueForKey:@"uri"];
     
-    return tracksResult;
+    NSMutableArray* returnTracksArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < names.count; i++) {
+        SATrack* track = [[SATrack alloc] initWithTitle:names[i] andImage:nil andID:uriList[i]];
+        [returnTracksArray addObject:track];
+    }
+    
+    return returnTracksArray;
                         
 }
 

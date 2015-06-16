@@ -8,6 +8,7 @@
 
 #import "SASearchViewController.h"
 #import "SAArtist.h"
+#import "SATrack.h"
 #import "SAArtistViewController.h"
 #import "ArtistTableViewCell.h"
 #import "SARequestManager.h"
@@ -19,6 +20,7 @@
 @property (nonatomic, strong) UISearchController *searchController;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *searchResults;
+@property (strong, nonatomic) NSArray *trackSearchResults;
 @property UITableViewController* tableViewController;
 @property (nonatomic,assign) SASearchModeOption searchModeOption;
 @end
@@ -77,7 +79,18 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.searchResults count];
+    switch (self.searchModeOption) {
+        case SASearchModeArtist:
+            return [self.searchResults count];
+            break;
+        case SASearchModeTrack:
+            return [self.trackSearchResults count];
+            break;
+        case SASearchModeBoth:
+            NSLog(@"oops");
+            return 10;
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -86,9 +99,28 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     if (indexPath.row % 2 == 0) {
         cell.backgroundColor = [UIColor lightGrayColor];
     }
-    SAArtist* artist = [self.searchResults objectAtIndex:indexPath.row];
-    cell.artistNameLabel.text = artist.name;
-    [cell.artistImageView sd_setImageWithURL:[NSURL URLWithString:artist.imageURL]];
+    switch (self.searchModeOption) {
+        case SASearchModeArtist:
+        {
+            SAArtist* artist = [self.searchResults objectAtIndex:indexPath.row];
+            cell.artistNameLabel.text = artist.name;
+            [cell.artistImageView sd_setImageWithURL:[NSURL URLWithString:artist.imageURL]];
+            break;
+        }
+        case SASearchModeTrack:
+        {
+            SATrack* track = [self.trackSearchResults objectAtIndex:indexPath.row];
+            cell.artistNameLabel.text = track.title;
+            cell.userInteractionEnabled = NO;
+            break;
+        }
+        case SASearchModeBoth:
+        {
+            NSLog(@"Both");
+        }
+        break;
+    }
+    
     
     return cell;
 }
@@ -96,6 +128,9 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
 #pragma mark - UISearchBarDelegate
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    switch (self.searchModeOption) {
+        case SASearchModeArtist:
+        {
             [[SARequestManager sharedManager] getObjectsWithQuery:searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockArtists) {
                 self.searchResults = blockArtists;
                 [self.tableViewController.tableView reloadData];
@@ -104,13 +139,35 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
             } failure:^(NSError *error) {
                 
             }];
+            break;
+        }
+        case SASearchModeTrack:
+        {
+            [[SARequestManager sharedManager] getObjectsWithQuery:searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockTracks) {
+                self.trackSearchResults = blockTracks;
+                [self.tableViewController.tableView reloadData];
+                [self.tableView reloadData];
+                
+            } failure:^(NSError *error) {
+                
+            }];
+            break;
+        }
+        case SASearchModeBoth:
+            //
+            break;
+    }
+
     
 
 }
 
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
     self.searchModeOption = self.searchController.searchBar.selectedScopeButtonIndex;
-    NSLog(@"Scope is: %lu",(unsigned long)self.searchModeOption);
+    self.searchResults = @[];
+    self.trackSearchResults = @[];
+    [self.tableViewController.tableView reloadData];
+    [self.tableView reloadData];
 }
 
 @end
