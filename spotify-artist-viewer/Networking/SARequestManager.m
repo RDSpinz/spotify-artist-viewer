@@ -39,11 +39,6 @@
                 case SASearchModeTrack:
                     returnArray = [self tracksFromJSON:jsonResult];
                     break;
-                case SASearchModeBoth:
-                    //
-                    break;
-                default:
-                    break;
             }
             if (success) {
                 success(returnArray);
@@ -59,11 +54,6 @@
             break;
         case SASearchModeTrack:
             return @"https://api.spotify.com/v1/search?q=%@&type=track&market=US";
-            break;
-        case SASearchModeBoth:
-            return @"https://api.spotify.com/v1/search?q=%@&type=track,artist&market=US";
-            break;
-        default:
             break;
     }
 }

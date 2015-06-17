@@ -12,7 +12,6 @@
 typedef NS_ENUM(NSUInteger, SASearchModeOption) {
     SASearchModeArtist = 0,
     SASearchModeTrack,
-    SASearchModeBoth,
 } NS_ENUM_AVAILABLE_IOS(8_0);
 
 + (instancetype)sharedManager;

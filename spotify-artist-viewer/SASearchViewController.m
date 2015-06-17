@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *searchResults;
 @property (strong, nonatomic) NSArray *trackSearchResults;
+@property (strong, nonatomic) NSMutableArray* allSearchResults;
 @property UITableViewController* tableViewController;
 @property (nonatomic,assign) SASearchModeOption searchModeOption;
 @end
@@ -40,8 +41,8 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     _searchController = [[UISearchController alloc] initWithSearchResultsController:self.tableViewController];
     self.searchController.searchResultsUpdater = self;
     [self.searchController.searchBar sizeToFit];
-    [self.searchController.searchBar setPlaceholder:@"Search for Artist, Track, or Both"];
-    self.searchController.searchBar.scopeButtonTitles = @[@"Artist",@"Track",@"Both"];
+    [self.searchController.searchBar setPlaceholder:@"Search for Artist or Track"];
+    self.searchController.searchBar.scopeButtonTitles = @[@"Artist",@"Track"];
     self.searchModeOption = self.searchController.searchBar.selectedScopeButtonIndex;
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
@@ -57,6 +58,8 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     
     self.definesPresentationContext = YES;  // know where you want UISearchController to be displayed
     CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
+    self.allSearchResults = [[NSMutableArray alloc] init];
     
     self.tableView.frame = screenRect;
 }
@@ -86,39 +89,30 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
         case SASearchModeTrack:
             return [self.trackSearchResults count];
             break;
-        case SASearchModeBoth:
-            NSLog(@"oops");
-            return 10;
     }
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     ArtistTableViewCell *cell = (ArtistTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (indexPath.row % 2 == 0) {
-        cell.backgroundColor = [UIColor lightGrayColor];
-    }
+    
     switch (self.searchModeOption) {
         case SASearchModeArtist:
         {
             SAArtist* artist = [self.searchResults objectAtIndex:indexPath.row];
             cell.artistNameLabel.text = artist.name;
             [cell.artistImageView sd_setImageWithURL:[NSURL URLWithString:artist.imageURL]];
+            cell.userInteractionEnabled = YES;
             break;
         }
         case SASearchModeTrack:
         {
             SATrack* track = [self.trackSearchResults objectAtIndex:indexPath.row];
             cell.artistNameLabel.text = track.title;
+            cell.artistImageView.image = nil;
             cell.userInteractionEnabled = NO;
             break;
         }
-        case SASearchModeBoth:
-        {
-            NSLog(@"Both");
-        }
-        break;
     }
     
     
@@ -131,31 +125,14 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     switch (self.searchModeOption) {
         case SASearchModeArtist:
         {
-            [[SARequestManager sharedManager] getObjectsWithQuery:searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockArtists) {
-                self.searchResults = blockArtists;
-                [self.tableViewController.tableView reloadData];
-                [self.tableView reloadData];
-                
-            } failure:^(NSError *error) {
-                
-            }];
+            [self setUpArtistsTableView];
             break;
         }
         case SASearchModeTrack:
         {
-            [[SARequestManager sharedManager] getObjectsWithQuery:searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockTracks) {
-                self.trackSearchResults = blockTracks;
-                [self.tableViewController.tableView reloadData];
-                [self.tableView reloadData];
-                
-            } failure:^(NSError *error) {
-                
-            }];
+            [self setUpTracksTableView];
             break;
         }
-        case SASearchModeBoth:
-            //
-            break;
     }
 
     
@@ -168,6 +145,28 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     self.trackSearchResults = @[];
     [self.tableViewController.tableView reloadData];
     [self.tableView reloadData];
+}
+
+-(void)setUpArtistsTableView {
+    [[SARequestManager sharedManager] getObjectsWithQuery:self.searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockArtists) {
+        self.searchResults = blockArtists;
+        [self.tableViewController.tableView reloadData];
+        [self.tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+-(void)setUpTracksTableView {
+    [[SARequestManager sharedManager] getObjectsWithQuery:self.searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockTracks) {
+        self.trackSearchResults = blockTracks;
+        [self.tableViewController.tableView reloadData];
+        [self.tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 @end
