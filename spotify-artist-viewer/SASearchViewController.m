@@ -17,13 +17,13 @@
 
 @interface SASearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating> {
 }
-@property (nonatomic, strong) UISearchController *searchController;
+@property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *searchResults;
 @property (strong, nonatomic) NSArray *trackSearchResults;
 @property (strong, nonatomic) NSMutableArray* allSearchResults;
-@property UITableViewController* tableViewController;
-@property (nonatomic,assign) SASearchModeOption searchModeOption;
+@property (strong, nonatomic) UITableViewController* tableViewController;
+@property (assign, nonatomic) SASearchModeOption searchModeOption;
 @end
 
 @implementation SASearchViewController
@@ -38,37 +38,58 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     [self.tableView registerClass:[ArtistTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     [self.tableViewController.tableView registerNib:[UINib nibWithNibName:@"ArtistTableViewCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"ArtistTableViewCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
-    _searchController = [[UISearchController alloc] initWithSearchResultsController:self.tableViewController];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableViewController.tableView.delegate = self;
+    self.tableViewController.tableView.dataSource = self;
+    
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:self.tableViewController];
     self.searchController.searchResultsUpdater = self;
     [self.searchController.searchBar sizeToFit];
     [self.searchController.searchBar setPlaceholder:@"Search for Artist or Track"];
     self.searchController.searchBar.scopeButtonTitles = @[@"Artist",@"Track"];
     self.searchModeOption = self.searchController.searchBar.selectedScopeButtonIndex;
+    self.searchController.delegate = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.delegate = self;
+
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
-    // we want to be the delegate for our filtered table so didSelectRowAtIndexPath is called for both tables
-    self.tableView.delegate = self;
-    self.tableViewController.tableView.delegate = self;
-    self.tableViewController.tableView.dataSource = self;
-    
-    self.searchController.delegate = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO; // default is YES
-    self.searchController.searchBar.delegate = self; // so we can monitor text changes + others
-    
-    self.definesPresentationContext = YES;  // know where you want UISearchController to be displayed
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    self.definesPresentationContext = YES;
     
     self.allSearchResults = [[NSMutableArray alloc] init];
     
-    self.tableView.frame = screenRect;
+    self.tableView.frame = [[UIScreen mainScreen] bounds];
 }
+
+-(void)setUpArtistsTableView {
+    [[SARequestManager sharedManager] getObjectsWithQuery:self.searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockArtists) {
+        self.searchResults = blockArtists;
+        [self.tableViewController.tableView reloadData];
+        [self.tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+-(void)setUpTracksTableView {
+    [[SARequestManager sharedManager] getObjectsWithQuery:self.searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockTracks) {
+        self.trackSearchResults = blockTracks;
+        [self.tableViewController.tableView reloadData];
+        [self.tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SAArtist *artist = [self.searchResults objectAtIndex:indexPath.row];
-    
     SAArtistViewController * detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"artistView"];
     detailViewController.artist = artist;
     [self presentViewController:detailViewController animated:YES completion:nil];
@@ -134,9 +155,6 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
             break;
         }
     }
-
-    
-
 }
 
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
@@ -146,27 +164,4 @@ static NSString *CellIdentifier = @"Artist_Cell_ID";
     [self.tableViewController.tableView reloadData];
     [self.tableView reloadData];
 }
-
--(void)setUpArtistsTableView {
-    [[SARequestManager sharedManager] getObjectsWithQuery:self.searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockArtists) {
-        self.searchResults = blockArtists;
-        [self.tableViewController.tableView reloadData];
-        [self.tableView reloadData];
-        
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
--(void)setUpTracksTableView {
-    [[SARequestManager sharedManager] getObjectsWithQuery:self.searchController.searchBar.text forItemEnum:self.searchModeOption success:^(NSArray *blockTracks) {
-        self.trackSearchResults = blockTracks;
-        [self.tableViewController.tableView reloadData];
-        [self.tableView reloadData];
-        
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
 @end

@@ -19,18 +19,17 @@
 
 @implementation SAArtistViewController
 
-static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api/v4/artist/biographies?api_key=KUAKSGNM0ERIJ3ZO8&id=spotify:artist:%@";
+static NSString* const SAArtistsSearchUrl = @"http://developer.echonest.com/api/v4/artist/biographies?api_key=KUAKSGNM0ERIJ3ZO8&id=spotify:artist:%@";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
     self.artist.bio = [self retrieveBio];
     self.artistBioTextView.text = self.artist.bio;
     
     self.scrollView.delegate = self;
     
-    [self.artistBioTextView setText:self.artist.bio];
+    self.artistBioTextView.text = self.artist.bio;
     [self textViewDidChange:self.artistBioTextView];
     
     CGFloat scrollViewHeight = 0.0f;
@@ -54,7 +53,7 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     [self.artistImageView sd_setImageWithURL:[NSURL URLWithString:self.artist.imageURL]];
     self.artistImageView.layer.cornerRadius = self.artistImageView.frame.size.height / 2;
     self.artistImageView.layer.masksToBounds = YES;
-    self.artistImageView.layer.borderWidth = 0;
+    self.artistImageView.layer.borderWidth = 1;
 }
 
 - (IBAction)backButtonPressed:(id)sender {
@@ -72,8 +71,6 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
     textView.frame = newFrame;
 }
 
-#pragma mark - retrieve bio
-
 -(NSString*)retrieveBio {
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:SAArtistsSearchUrl,self.artist.uri]]];
         
@@ -83,15 +80,16 @@ static NSString * const SAArtistsSearchUrl = @"http://developer.echonest.com/api
                                                                      error:&jsonError];
         
     NSArray *artistsResult = [jsonResult valueForKeyPath:@"response.biographies"];
+    NSString* returnString = [[NSString alloc] init];
     for (NSDictionary* obj in artistsResult) {
         if ([[obj valueForKey:@"site"] isEqualToString:@"last.fm"]) {
-            self.artist.bio = [obj valueForKey:@"text"];
+            returnString = [obj valueForKey:@"text"];
             break;
-        } else {
-            self.artist.bio = [obj valueForKey:@"text"];
+        } else if ([[obj valueForKey:@"text"] length] > self.artist.bio.length){
+            returnString = [obj valueForKey:@"text"];
         }
     }
-    return self.artist.bio;
+    return returnString;
 }
 
 
