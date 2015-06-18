@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ArtistTableViewCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UILabel *artistNameLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *artistImageView;
 
 @end

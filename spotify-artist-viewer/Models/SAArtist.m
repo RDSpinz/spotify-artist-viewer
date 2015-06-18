@@ -8,9 +8,9 @@
 #import "SAArtist.h"
 
 @implementation SAArtist
--(instancetype)initWithName:(NSString*)name image:(NSString*)image andBio:(NSString*)bio andURI:(NSString *)uri{
+-(instancetype)initWithName:(NSString*)name image:(NSString*)image andBio:(NSString*)bio andURI:(NSString *)uri {
     self = [super init];
-    if (self){
+    if (self) {
         self.name = name;
         self.imageURL = image;
         self.bio = bio;
@@ -19,12 +19,12 @@
     return self;
 }
 
--(NSString*)description{
+-(NSString*)description {
     NSString* descriptionString = [NSString stringWithFormat:@"Artist: %@, Image: %@, URI: %@",self.name,self.imageURL, self.uri];
     return descriptionString;
 }
 
--(NSComparisonResult)compare:(SAArtist*)otherObject{
+-(NSComparisonResult)compare:(SAArtist*)otherObject {
     return [self.name compare:otherObject.name];
 }
 @end

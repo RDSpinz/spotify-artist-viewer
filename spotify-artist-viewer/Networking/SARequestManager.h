@@ -9,10 +9,16 @@
 
 @interface SARequestManager : NSObject
 
+typedef NS_ENUM(NSUInteger, SASearchModeOption) {
+    SASearchModeArtist = 0,
+    SASearchModeTrack,
+} NS_ENUM_AVAILABLE_IOS(8_0);
+
 + (instancetype)sharedManager;
 
-- (void)getArtistsWithQuery:(NSString *)query
+- (void)getObjectsWithQuery:(NSString *)query forItemEnum:(SASearchModeOption)artistTrackEnum
                     success:(void (^)(NSArray *artists))success
                     failure:(void (^)(NSError *error))failure;
+
 
 @end

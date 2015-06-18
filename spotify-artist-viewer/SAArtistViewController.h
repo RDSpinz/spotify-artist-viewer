@@ -10,7 +10,7 @@
 @class SAArtist;
 
 @interface SAArtistViewController : UIViewController
--(instancetype)initWithArtist:(SAArtist*)artist;
+
 @property (strong, nonatomic) IBOutlet UILabel *artistNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *artistImageView;
 @property (strong, nonatomic) IBOutlet UITextView *artistBioTextView;
