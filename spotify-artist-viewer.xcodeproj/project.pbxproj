@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A34E1FC1B305692009E18B0 /* SATrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34E1FB1B305692009E18B0 /* SATrack.m */; };
-		1AA686F71B2F6AC20058091A /* SATrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA686F51B2F6AC20058091A /* SATrackViewController.m */; };
-		1AA686F81B2F6AC20058091A /* SATrackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AA686F61B2F6AC20058091A /* SATrackViewController.xib */; };
+		1A592A7D1B3338520030023B /* SATrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A592A7C1B3338520030023B /* SATrack.m */; };
 		1AED97601B275FCE0059A1AC /* SAArtistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AED975E1B275FCE0059A1AC /* SAArtistViewController.m */; };
 		1AED97651B27617A0059A1AC /* SASearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AED97631B27617A0059A1AC /* SASearchViewController.m */; };
 		1AED976A1B2881E40059A1AC /* ArtistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AED97681B2881E40059A1AC /* ArtistTableViewCell.m */; };
@@ -36,11 +34,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1A34E1FA1B305692009E18B0 /* SATrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SATrack.h; sourceTree = "<group>"; };
-		1A34E1FB1B305692009E18B0 /* SATrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SATrack.m; sourceTree = "<group>"; };
-		1AA686F41B2F6AC20058091A /* SATrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SATrackViewController.h; sourceTree = "<group>"; };
-		1AA686F51B2F6AC20058091A /* SATrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SATrackViewController.m; sourceTree = "<group>"; };
-		1AA686F61B2F6AC20058091A /* SATrackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SATrackViewController.xib; sourceTree = "<group>"; };
+		1A592A7B1B3338520030023B /* SATrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SATrack.h; path = Models/SATrack.h; sourceTree = "<group>"; };
+		1A592A7C1B3338520030023B /* SATrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SATrack.m; path = Models/SATrack.m; sourceTree = "<group>"; };
 		1AED975D1B275FCE0059A1AC /* SAArtistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAArtistViewController.h; sourceTree = "<group>"; };
 		1AED975E1B275FCE0059A1AC /* SAArtistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAArtistViewController.m; sourceTree = "<group>"; };
 		1AED97621B27617A0059A1AC /* SASearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SASearchViewController.h; sourceTree = "<group>"; };
@@ -127,9 +122,6 @@
 				1AED975E1B275FCE0059A1AC /* SAArtistViewController.m */,
 				1AED97621B27617A0059A1AC /* SASearchViewController.h */,
 				1AED97631B27617A0059A1AC /* SASearchViewController.m */,
-				1AA686F41B2F6AC20058091A /* SATrackViewController.h */,
-				1AA686F51B2F6AC20058091A /* SATrackViewController.m */,
-				1AA686F61B2F6AC20058091A /* SATrackViewController.xib */,
 				1AED97671B2881E40059A1AC /* ArtistTableViewCell.h */,
 				1AED97681B2881E40059A1AC /* ArtistTableViewCell.m */,
 				1AED97691B2881E40059A1AC /* ArtistTableViewCell.xib */,
@@ -172,8 +164,8 @@
 			children = (
 				2E7674521B2676F400336867 /* SAArtist.h */,
 				2E7674531B2676F400336867 /* SAArtist.m */,
-				1A34E1FA1B305692009E18B0 /* SATrack.h */,
-				1A34E1FB1B305692009E18B0 /* SATrack.m */,
+				1A592A7B1B3338520030023B /* SATrack.h */,
+				1A592A7C1B3338520030023B /* SATrack.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -282,7 +274,6 @@
 				2E76743B1B26766200336867 /* LaunchScreen.xib in Resources */,
 				1AED976B1B2881E40059A1AC /* ArtistTableViewCell.xib in Resources */,
 				2E7674381B26766200336867 /* Images.xcassets in Resources */,
-				1AA686F81B2F6AC20058091A /* SATrackViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,9 +326,8 @@
 			files = (
 				2E7674541B2676F400336867 /* SAArtist.m in Sources */,
 				1AED97651B27617A0059A1AC /* SASearchViewController.m in Sources */,
-				1AA686F71B2F6AC20058091A /* SATrackViewController.m in Sources */,
 				1AED976A1B2881E40059A1AC /* ArtistTableViewCell.m in Sources */,
-				1A34E1FC1B305692009E18B0 /* SATrack.m in Sources */,
+				1A592A7D1B3338520030023B /* SATrack.m in Sources */,
 				1AED97601B275FCE0059A1AC /* SAArtistViewController.m in Sources */,
 				2E7674301B26766200336867 /* AppDelegate.m in Sources */,
 				2E76742D1B26766200336867 /* main.m in Sources */,
